@@ -14,16 +14,22 @@ class TaskController extends Controller
     }
     public function store(Request $request)
     {
-        $task = Task::create([
-            'title'=>$request->title,
-            'description'=>$request->description,
-            'priority'=>$request->priority
+        $vaildatedData = $request->validate([
+            'title'=>['required|string|max:250'],
+            'description'=>['required|string'],
+            'priority'=>['required|integer|min:1|max:5']
         ]);
+        $task = Task::create($vaildatedData);
         return response()->json($task,$status=201);
     }
     public function update(Request $request, $id)
     {
         $task = Task::findOrFail($id);
+        $vaildatedData = $request->validate([
+            'title'=>['sometimes|string|max:250'],
+            'description'=>['sometimes|string'],
+            'priority'=>['sometimes|integer|min:1|max:5']
+        ]);
         $task->update($request->only('title','description','priority'));
         return response()->json($task,200);
     }
