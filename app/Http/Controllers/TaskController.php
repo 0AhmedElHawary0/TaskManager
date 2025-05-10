@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -12,25 +13,20 @@ class TaskController extends Controller
         $tasks = Task::all();
         return response()->json($tasks,200);
     }
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        $vaildatedData = $request->validate([
-            'title'=>['required|string|max:250'],
-            'description'=>['required|string'],
-            'priority'=>['required|integer|min:1|max:5']
-        ]);
-        $task = Task::create($vaildatedData);
-        return response()->json($task,$status=201);
+        $task = Task::create($request->validated());
+        return response()->json($task,201);
     }
     public function update(Request $request, $id)
     {
         $task = Task::findOrFail($id);
         $vaildatedData = $request->validate([
-            'title'=>['sometimes|string|max:250'],
-            'description'=>['sometimes|string'],
-            'priority'=>['sometimes|integer|min:1|max:5']
+            'title'=>'sometimes|string|max:250',
+            'description'=>'sometimes|string',
+            'priority'=>'sometimes|integer|min:1|max:5'
         ]);
-        $task->update($request->only('title','description','priority'));
+        $task->update($vaildatedData);
         return response()->json($task,200);
     }
     public function getById($id)
