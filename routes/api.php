@@ -17,6 +17,5 @@ Route::get('profile/{id}',[ProfileController::class,'Show']);
 Route::put('update/{id}',[ProfileController::class,'Update']);
 
 Route::get('user/{id}/profile',[UserController::class,'GetProfile']);
-
-
-
+Route::get('user/{id}/tasks',[UserController::class,'GetUserTasks']);
+Route::get('task/{id}/user',[TaskController::class,'GetTaskUser']);
