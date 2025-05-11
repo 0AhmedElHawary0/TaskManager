@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -11,11 +12,17 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('tasks',TaskController::class);
+Route::get('task/{taskId}/user',[TaskController::class,'GetTaskUser']);
+Route::post('tasks/{taskId}/categories',[TaskController::class,'addCategoriesToTask']);
+Route::get('tasks/{taskId}/categories',[TaskController::class,'getTaskCategories']);
+
 
 Route::post('profile',[ProfileController::class, 'Store']);
-Route::get('profile/{id}',[ProfileController::class,'Show']);
-Route::put('update/{id}',[ProfileController::class,'Update']);
+Route::get('profile/{profileId}',[ProfileController::class,'Show']);
+Route::put('update/{profileId}',[ProfileController::class,'Update']);
 
-Route::get('user/{id}/profile',[UserController::class,'GetProfile']);
-Route::get('user/{id}/tasks',[UserController::class,'GetUserTasks']);
-Route::get('task/{id}/user',[TaskController::class,'GetTaskUser']);
+Route::get('user/{userId}/profile',[UserController::class,'GetProfile']);
+Route::get('user/{userId}/tasks',[UserController::class,'GetUserTasks']);
+
+
+Route::get('category/{categoryId}/tasks',[CategoryController::class,'getCategoryTasks']);

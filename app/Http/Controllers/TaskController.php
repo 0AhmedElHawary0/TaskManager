@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddCategoriesToTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
@@ -56,9 +57,23 @@ class TaskController extends Controller
         return response()->json(null,204);
     }
 
-    public function GetTaskUser($id)
+    public function getTaskUser($id)
     {
         $user = Task::findOrFail($id)->User;
         return response()->json($user, 200);
+    }
+
+    public function addCategoriesToTask(AddCategoriesToTaskRequest $request,$taskId)
+    {
+        $task = Task::findOrFail($taskId);
+        $data = $request->validated();
+        $task->Categories()->attach($data['category_id']);
+        return response()->json('Category attached successfully!', 200);
+    }
+
+    public function getTaskCategories($taskId)
+    {
+        $categories = Task::findOrFail($taskId)->Categories;
+        return response()->json($categories, 200);
     }
 }
