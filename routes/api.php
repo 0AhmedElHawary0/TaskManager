@@ -11,6 +11,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+
+
+Route::post('register',[UserController::class,'register']);
+Route::get('user/{userId}/profile',[UserController::class,'GetProfile']);
+Route::get('user/{userId}/tasks',[UserController::class,'GetUserTasks']);
+
 Route::apiResource('tasks',TaskController::class);
 Route::get('task/{taskId}/user',[TaskController::class,'GetTaskUser']);
 Route::post('tasks/{taskId}/categories',[TaskController::class,'addCategoriesToTask']);
@@ -21,8 +27,7 @@ Route::post('profile',[ProfileController::class, 'Store']);
 Route::get('profile/{profileId}',[ProfileController::class,'Show']);
 Route::put('update/{profileId}',[ProfileController::class,'Update']);
 
-Route::get('user/{userId}/profile',[UserController::class,'GetProfile']);
-Route::get('user/{userId}/tasks',[UserController::class,'GetUserTasks']);
+
 
 
 Route::get('category/{categoryId}/tasks',[CategoryController::class,'getCategoryTasks']);
