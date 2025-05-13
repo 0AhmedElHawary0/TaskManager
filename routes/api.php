@@ -15,6 +15,7 @@ Route::get('/user', function (Request $request) {
 
 Route::post('register',[UserController::class,'register']);
 Route::post('login',[UserController::class,'login']);
+Route::post('logout',[UserController::class,'logout'])->middleware('auth:sanctum');
 Route::get('user/{userId}/profile',[UserController::class,'GetProfile']);
 Route::get('user/{userId}/tasks',[UserController::class,'GetUserTasks']);
 
