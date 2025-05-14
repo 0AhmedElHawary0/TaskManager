@@ -90,4 +90,10 @@ class TaskController extends Controller
         $categories = Task::findOrFail($taskId)->Categories;
         return response()->json($categories, 200);
     }
+
+    public function getAllTasks()
+    {
+        $tasks = Task::all();
+        return response()->json($tasks, 200);
+    }
 }

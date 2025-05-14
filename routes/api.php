@@ -24,12 +24,13 @@ Route::middleware('auth:sanctum')->group(function()
         Route::get('/{userId}/tasks',[UserController::class,'GetUserTasks']);
     });
                         /*------------Tasks----------*/
-    Route::prefix('task')->group(function()
+    Route::prefix('tasks')->group(function()
     {
         Route::apiResource('',TaskController::class);
         Route::get('/{taskId}/user',[TaskController::class,'GetTaskUser']);
         Route::post('/{taskId}/categories',[TaskController::class,'addCategoriesToTask']);
         Route::get('/{taskId}/categories',[TaskController::class,'getTaskCategories']);
+        Route::get('/getAll',[TaskController::class,'getAllTasks'])->middleware('CheckUser');
     });
                         /*------------Profile----------*/
     Route::prefix('profile')->group(function()
