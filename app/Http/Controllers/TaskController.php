@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -15,8 +16,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
-        return response()->json($tasks,200);
+        $tasks = Auth::user()->Tasks;
+        return response()->json($tasks, 200);
     }
 
     /**
@@ -24,8 +25,11 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        $task = Task::create($request->validated());
-        return response()->json($task,201);
+        $user_id = Auth::user()->id;
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = $user_id;
+        $task = Task::create($validatedData);
+        return response()->json($task, 201);
     }
 
     /**
@@ -42,9 +46,19 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, int $id)
     {
+        $user = Auth::user(); // safer than Auth::user()
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
         $task = Task::findOrFail($id);
+        if ($user->id !== $task->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $task->update($request->validated());
-        return response()->json($task,200);
+        return response()->json($task, 200);
     }
 
     /**
@@ -54,7 +68,7 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
         $task->delete();
-        return response()->json(null,204);
+        return response()->json(null, 204);
     }
 
     public function getTaskUser($id)
@@ -63,7 +77,7 @@ class TaskController extends Controller
         return response()->json($user, 200);
     }
 
-    public function addCategoriesToTask(AddCategoriesToTaskRequest $request,$taskId)
+    public function addCategoriesToTask(AddCategoriesToTaskRequest $request, $taskId)
     {
         $task = Task::findOrFail($taskId);
         $data = $request->validated();

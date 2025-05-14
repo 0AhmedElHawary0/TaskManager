@@ -11,25 +11,36 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
-
 Route::post('register',[UserController::class,'register']);
 Route::post('login',[UserController::class,'login']);
 Route::post('logout',[UserController::class,'logout'])->middleware('auth:sanctum');
-Route::get('user/{userId}/profile',[UserController::class,'GetProfile']);
-Route::get('user/{userId}/tasks',[UserController::class,'GetUserTasks']);
 
-Route::apiResource('tasks',TaskController::class);
-Route::get('task/{taskId}/user',[TaskController::class,'GetTaskUser']);
-Route::post('tasks/{taskId}/categories',[TaskController::class,'addCategoriesToTask']);
-Route::get('tasks/{taskId}/categories',[TaskController::class,'getTaskCategories']);
-
-
-Route::post('profile',[ProfileController::class, 'Store']);
-Route::get('profile/{profileId}',[ProfileController::class,'Show']);
-Route::put('update/{profileId}',[ProfileController::class,'Update']);
-
-
-
-
-Route::get('category/{categoryId}/tasks',[CategoryController::class,'getCategoryTasks']);
+Route::middleware('auth:sanctum')->group(function()
+{
+                        /*------------User----------*/
+    Route::prefix('user')->group(function()
+    {
+        Route::get('/{userId}/profile',[UserController::class,'GetProfile']);
+        Route::get('/{userId}/tasks',[UserController::class,'GetUserTasks']);
+    });
+                        /*------------Tasks----------*/
+    Route::prefix('task')->group(function()
+    {
+        Route::apiResource('',TaskController::class);
+        Route::get('/{taskId}/user',[TaskController::class,'GetTaskUser']);
+        Route::post('/{taskId}/categories',[TaskController::class,'addCategoriesToTask']);
+        Route::get('/{taskId}/categories',[TaskController::class,'getTaskCategories']);
+    });
+                        /*------------Profile----------*/
+    Route::prefix('profile')->group(function()
+    {
+        Route::post('',[ProfileController::class,'Store']);
+        Route::get('/{profileId}',[ProfileController::class,'Show']);
+        Route::put('/{profileId}',[ProfileController::class,'Update']);
+    });
+                        /*------------Category----------*/
+    Route::prefix('category')->group(function()
+    {
+        Route::get('category/{categoryId}/tasks',[CategoryController::class,'getCategoryTasks']);
+    });
+});
