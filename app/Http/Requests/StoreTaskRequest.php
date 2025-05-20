@@ -25,7 +25,7 @@ class StoreTaskRequest extends FormRequest
         [
             'title'=>'required|string|max:250',
             'description'=>'required|string',
-            'priority'=>'required|integer|min:1|max:5'
+            'priority'=>'required|in:high,medium,low'
         ];
     }
     public function messages(): array

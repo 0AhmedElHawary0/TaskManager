@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function()
         Route::post('/{taskId}/categories',[TaskController::class,'addCategoriesToTask']);
         Route::get('/{taskId}/categories',[TaskController::class,'getTaskCategories']);
         Route::get('/getAll',[TaskController::class,'getAllTasks'])->middleware('CheckUser');
+        Route::get('/orderedTasks',[TaskController::class,'getTasksByPrioity']);
     });
                         /*------------Profile----------*/
     Route::prefix('profile')->group(function()
