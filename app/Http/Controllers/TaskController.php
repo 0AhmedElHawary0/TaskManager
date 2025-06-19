@@ -102,4 +102,23 @@ class TaskController extends Controller
         $tasks = Auth::user()->Tasks()->orderByRaw("FIELD(priority,'high','medium','low')")->get();
         return response()->json($tasks, 200);
     }
+
+
+    public function addToFavourite($taskId)
+    {
+        Task::firstOrFail($taskId);
+        Auth::user()->FavourtieTasks()->syncWithoutDetaching($taskId);
+        return response()->json(['message'=>'Task added to favourites successfully!'], 200);
+    }
+
+
+
+
+
+
+
+
+
+
+
 }
