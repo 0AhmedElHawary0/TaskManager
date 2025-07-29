@@ -32,10 +32,11 @@ Route::middleware('auth:sanctum')->group(function()
         Route::get('/{taskId}/categories',[TaskController::class,'getTaskCategories']);
         Route::get('/getAll',[TaskController::class,'getAllTasks'])->middleware('CheckUser');
         Route::get('/orderedTasks',[TaskController::class,'getTasksByPrioity']);
+        Route::post('/{taskId}/favourite',[TaskController::class,'addToFavourite']);
+        Route::delete('/{taskId}/favourite',[TaskController::class,'reomveFromFavourite']);
+        Route::get('/{userId}/favourite',[TaskController::class,'getFavouriteTasks']);
     });
-    Route::post('task/{taskId}/favourite',[TaskController::class,'addToFavourite']);
-    Route::delete('task/{taskId}/favourite',[TaskController::class,'reomveFromFavourite']);
-    Route::get('task/{userId}/favourite',[TaskController::class,'getFavouriteTasks']);
+
 
                         /*------------Profile----------*/
     Route::prefix('profile')->group(function()
