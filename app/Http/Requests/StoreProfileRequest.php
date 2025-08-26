@@ -28,7 +28,8 @@ class StoreProfileRequest extends FormRequest
             'address' => 'nullable|string|max:100',
             'phone'=>'required|string|max:15',
             'date_of_birth' =>'nullable|date',
-            'bio'=>'nullable|string'
+            'bio'=>'nullable|string',
+            'image'=>'required|image|mimes:png,jpg,jpeg|max:2048'
         ];
     }
 }
